@@ -1,35 +1,59 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import Login from "./pages/login";
+import Navbar from "./components/Navbar";
+import Register from "./pages/Register";
+import Home from "./pages/Home";
+import ErrorPage from "./components/ErrorPage";
+import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
+import { useDispatch, useSelector } from "react-redux";
+import { checkAuth } from "./redux/authSlice";
+import { useEffect } from "react";
+import { Loader } from "lucide-react";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const dispatch = useDispatch();
+  const { loading, authenticated, user } = useSelector((state) => state.auth);
+
+  console.log("selector", loading, authenticated, user);
+
+  useEffect(() => {
+    dispatch(checkAuth());
+  }, [dispatch]);
+
+  if (loading && !authenticated && !user) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader className="size-10 animate-spin" />
+      </div>
+    );
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <BrowserRouter>
+      <Navbar />
+      <Routes>
+        <Route
+          path="/"
+          element={authenticated ? <Home /> : <Navigate to={"/login"} />}
+        />
+        <Route
+          path="/login"
+          element={!authenticated ? <Login /> : <Navigate to={"/"} />}
+        />
+        <Route
+          path="/register"
+          element={!authenticated ? <Register /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/profile"
+          element={authenticated ? <Profile /> : <Navigate to="/login" />}
+        />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="*" element={<ErrorPage />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;

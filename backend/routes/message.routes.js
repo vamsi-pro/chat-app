@@ -4,7 +4,7 @@ import {
   getUsers,
   getMessages,
   sendMessage,
-} from "../controllers/messageController.js";
+} from "../src/controllers/messageController.js";
 
 const router = express.Router();
 

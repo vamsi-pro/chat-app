@@ -1,11 +1,10 @@
 import jwt from "jsonwebtoken";
-import User from "../models/user.model.js";
+import User from "../../models/user.model.js";
 
 export const authenticate = async (req, res, next) => {
   try {
     const token = req.cookies.access_token;
     if (!token) return res.status(401).json({ message: "Unauhtorized user!" });
-
     const decodeToken = jwt.verify(token, process.env.JWT_SECRET);
 
     if (!decodeToken) {
@@ -13,8 +12,6 @@ export const authenticate = async (req, res, next) => {
         .status(401)
         .json({ message: "Unauhtorized user - invalid token!" });
     }
-
-    console.log(decodeToken.userId);
 
     const userDetails = await User.findById(decodeToken.userId).select(
       "-password"

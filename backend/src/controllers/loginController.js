@@ -1,6 +1,6 @@
-import User from "../models/user.model.js";
+import User from "../../models/user.model.js";
 import bcryptjs from "bcryptjs";
-import { generateToken } from "../utils/generateToken.js";
+import { generateToken } from "../../utils/generateToken.js";
 import cloudinary from "../lib/cloudnary.js";
 
 export const loginController = async (req, res) => {
@@ -20,7 +20,7 @@ export const loginController = async (req, res) => {
     if (!isPasswordValid)
       return res.status(400).json({ message: "Invalid user password!" });
 
-    generateToken(validUser._id, res);
+    await generateToken(validUser._id, res);
     res.status(200).json(rest);
   } catch (err) {
     res.status(500).json({ message: "Internal server error", error: err });
@@ -66,13 +66,12 @@ export const registerController = async (req, res) => {
 
 export const logoutController = async (req, res) => {
   try {
-    const { id } = req.params;
-    const result = await User.findByIdAndDelete({ _id: id });
-    if (!result) return res.status(400).json("user does not exist");
+    // const { id } = req.params;
+    // const result = await User.findByIdAndDelete({ _id: id });
+    // if (!result) return res.status(400).json("user does not exist");
     res.cookie("access_token", "", { maxAge: 0 });
 
-    if (result)
-      return res.status(200).json({ message: "User deleted sucessfully!" });
+    res.status(200).json({ message: "User deleted sucessfully!" });
   } catch (err) {
     return res
       .status(500)
@@ -88,9 +87,10 @@ export const updateProfileController = async (req, res) => {
       return res.status(400).json({ message: "profile image is required" });
 
     const uploadResponse = await cloudinary.uploader.upload(avatar);
+    console.log("uploadResponse", uploadResponse);
     const updatedUser = await User.findByIdAndUpdate(
       userId,
-      { avatar: uploadResponse.secure_url },
+      { profile_avatar: uploadResponse.secure_url },
       { new: true }
     );
 

@@ -7,16 +7,16 @@ import {
   logoutController,
   updateProfileController,
   checkAuth,
-} from "../controllers/loginController.js";
-import { authenticate } from "../middleware/authenticate.js";
+} from "../src/controllers/loginController.js";
+import { authenticate } from "../src/middleware/authenticate.js";
 
 router.post("/login", loginController);
 
 router.post("/register", registerController);
 
-router.post("/logout/:id", logoutController);
+router.get("/logout", logoutController);
 
-router.put("/update-profile", authenticate, updateProfileController);
+router.put("/update", authenticate, updateProfileController);
 
 router.get("/check", authenticate, checkAuth);
 
