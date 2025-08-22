@@ -1,13 +1,11 @@
 import cloudinary from "../lib/cloudnary.js";
-import Message from "../../models/message.model.js";
-import User from "../../models/user.model.js";
+import Message from "../models/message.model.js";
+import User from "../models/user.model.js";
 
 export const getUsers = async (req, res, next) => {
   try {
     const userId = req.user._id;
-    const result = await User.find({ _id: { $ne: userId } }).select(
-      "-password"
-    );
+    const result = await User.find({ _id: { $ne: userId } }, { password: 0 });
     res.status(200).json(result);
   } catch (err) {
     next(err);
@@ -35,6 +33,9 @@ export const sendMessage = async (req, res, next) => {
   try {
     const { image, text } = req.body;
     const { id: receiverId } = req.params;
+    const senderId = req.user._id;
+
+    console.log(image, text);
 
     let imageUrl;
 
@@ -49,6 +50,7 @@ export const sendMessage = async (req, res, next) => {
       image: imageUrl,
       text,
     });
+    await newMessage.save();
     res.status(201).json(newMessage);
   } catch (err) {
     next(err);

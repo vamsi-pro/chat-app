@@ -4,8 +4,8 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 
 import { connectDB } from "./lib/db.js";
-import authRoute from "../routes/auth.routes.js";
-import messageRoute from "../routes/message.routes.js";
+import authRoute from "./routes/auth.routes.js";
+import messageRoute from "./routes/message.routes.js";
 import { errorMiddleware } from "../src/middleware/errorMiddleware.js";
 import { authenticate } from "../src/middleware/authenticate.js";
 
@@ -23,7 +23,7 @@ app.use(
 );
 
 app.use("/api/auth", authRoute);
-app.use("/api/message", authenticate, messageRoute);
+app.use("/api/message", messageRoute);
 app.use(errorMiddleware);
 
 const PORT = 3000;

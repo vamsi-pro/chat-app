@@ -2,6 +2,7 @@ import { Camera, Mail, User } from "lucide-react";
 import React, { useState, type FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateProfile } from "../redux/updateSlice";
+import { avatarImg } from "../utils/helper";
 
 const Profile: FC = () => {
   const [selectedImg, setSelectedImg] = useState(null);
@@ -39,7 +40,7 @@ const Profile: FC = () => {
           <div className="flex flex-col items-center gap-4">
             <div className="relative">
               <img
-                src={selectedImg || user.profile_avatar || "/avatar.png"}
+                src={selectedImg || user.profile_avatar || avatarImg()}
                 alt="Profile"
                 className="size-32 rounded-full object-cover border-4 "
               />

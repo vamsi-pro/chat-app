@@ -7,8 +7,8 @@ import {
   logoutController,
   updateProfileController,
   checkAuth,
-} from "../src/controllers/loginController.js";
-import { authenticate } from "../src/middleware/authenticate.js";
+} from "../controllers/loginController.js";
+import { authenticate } from "../middleware/authenticate.js";
 
 router.post("/login", loginController);
 

@@ -1,6 +1,6 @@
-import User from "../../models/user.model.js";
+import User from "../models/user.model.js";
 import bcryptjs from "bcryptjs";
-import { generateToken } from "../../utils/generateToken.js";
+import { generateToken } from "../utils/generateToken.js";
 import cloudinary from "../lib/cloudnary.js";
 
 export const loginController = async (req, res) => {

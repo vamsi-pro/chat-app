@@ -14,6 +14,7 @@ import { Loader } from "lucide-react";
 function App() {
   const dispatch = useDispatch();
   const { loading, authenticated, user } = useSelector((state) => state.auth);
+  const { theme } = useSelector((state: any) => state.theme);
 
   console.log("selector", loading, authenticated, user);
 
@@ -30,29 +31,31 @@ function App() {
   }
 
   return (
-    <BrowserRouter>
-      <Navbar />
-      <Routes>
-        <Route
-          path="/"
-          element={authenticated ? <Home /> : <Navigate to={"/login"} />}
-        />
-        <Route
-          path="/login"
-          element={!authenticated ? <Login /> : <Navigate to={"/"} />}
-        />
-        <Route
-          path="/register"
-          element={!authenticated ? <Register /> : <Navigate to="/" />}
-        />
-        <Route
-          path="/profile"
-          element={authenticated ? <Profile /> : <Navigate to="/login" />}
-        />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="*" element={<ErrorPage />} />
-      </Routes>
-    </BrowserRouter>
+    <div data-theme={theme}>
+      <BrowserRouter>
+        <Navbar />
+        <Routes>
+          <Route
+            path="/"
+            element={authenticated ? <Home /> : <Navigate to={"/login"} />}
+          />
+          <Route
+            path="/login"
+            element={!authenticated ? <Login /> : <Navigate to={"/"} />}
+          />
+          <Route
+            path="/register"
+            element={!authenticated ? <Register /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/profile"
+            element={authenticated ? <Profile /> : <Navigate to="/login" />}
+          />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="*" element={<ErrorPage />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 }
 
